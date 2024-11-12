@@ -6,11 +6,11 @@ execute:
   echo: true
 
 book:
-  title: "YOUR PROJECT TITLE"
+  title: "Socioeconomic Influences on County-Level Voting Trends in Presidential Elections (2000-2020)"
   author:
-    - AUTHOR1 (UNI1)
-    - AUTHOR2 (UNI2)
-  repo-url: https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME
+    - Anh Lam (adl2196)
+    - Long Gao (lg3385)
+  repo-url: https://github.com/lg3385/EDAV_project
   date: today
   page-footer:
     right: |
