@@ -2,4 +2,83 @@
 
 ## Description
 
+1. The dataset, `countypres_2000-2020.csv`, provides county-level presidential election returns from 2000 to 2020. It is sourced from official state election data records and hosted on the [Harvard Dataverse](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/VOQCHQ). The dataset was last updated on June 8, 2021.
+
+2. The dataset, `Education.csv`, provides information on county-level educational attainment data from 1970 to 2022. It is sourced from the USDA Economic Research Service's County-Level Data Sets, available [USDA](https://www.ers.usda.gov/data-products/county-level-data-sets/county-level-data-sets-download-data/). The dataset was last updated on June 20, 2024.
+
+3. The dataset, `Unemployment.csv`, provides county-level unemployment rates from 2000 to 2022. It is sourced from the USDA Economic Research Service's County-Level Data Sets, available [USDA ](https://www.ers.usda.gov/data-products/county-level-data-sets/county-level-data-sets-download-data/). The dataset was last updated on June 20, 2024.
+
+
+### Data Overview
+
+1. The dataset, `countypres_2000-2020.csv`, contains the following variables:
+- **`year`**: election year
+- **`state`**: state name
+- **`state_po`**: U.S. postal code state abbreviation
+- **`county_name`**: county name
+- **`county_fips`**: county FIPS code
+- **`office`**: President
+- **`candidate`**: name of the candidate
+- **`party`**: party of the candidate; takes form of DEMOCRAT, REPUBLICAN, GREEN, LIBERTARIAN, or OTHER
+- **`candidatevotes`**: votes received by this candidate for this particular party
+- **`totalvotes`**: total number of votes cast in this county-year
+- **`mode`**: mode of ballots cast; default is TOTAL, with different modes specified for 2020
+- **`version`**: date when dataset was finalized
+
+2. The dataset, `Education.csv`, contains the following variables:
+- **`FIPS Code`**: FIPS code
+- **`State`**: state abbreviation
+- **`Area name`**: name of state or county
+- **`Attribute`**: educational metric
+- **`Value `**: The corresponding value for the educational metric, typically as a percentage or count
+
+3. The dataset, `Unemployment.csv`, contains the following variables:
+- **`FIPS_Code`**: FIPS code
+- **`State`**: state abbreviation
+- **`Area_Name`**: name of state or county
+- **`Attribute`**: unemployment-related metric
+- **`Value `**: The corresponding value for the unemployment metric, typically as a percentage or count
+
+
+### Issues or Problems
+
+1. `countypres_2000-2020.csv`: County results in Alaska for 2004 are based on official Alaska data, but it is clear the district returns significantly overstate the number of votes cast. In Alaska, the county_fips field stores a combination of state FIPS code and district.
+
+2. `Education.csv`: Some attribute labels are ambiguous and may require clarification or mapping to standardized educational metrics.
+
+3. `Unemployment.csv`: Inconsistencies in the naming of attributes could pose challenges in aligning the data with other sources.
+
+
+### Data Import Plan
+
+1. These data will be imported into R using `readr::read_csv()` for efficient loading and analysis.
+
+2. FIPS codes may be used to merge datasets.
+
+
 ## Missing value analysis
+
+```{r}
+data_1 <- read.csv("countypres_2000-2020.csv")
+str(data_1)
+
+missing_summary <- colSums(is.na(data_1))
+print(missing_summary)
+```
+
+```{r}
+data_2 <- read.csv("Education.csv")
+str(data_2)
+
+missing_summary <- colSums(is.na(data_2))
+print(missing_summary)
+```
+
+```{r}
+data_3 <- read.csv("Unemployment.csv")
+str(data_3)
+
+missing_summary <- colSums(is.na(data_3))
+print(missing_summary)
+```
+

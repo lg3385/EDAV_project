@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.555">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Socioeconomic Influences on County-Level Voting Trends in Presidential Elections (2000-2020) - 2&nbsp; Data</title>
+<title>2&nbsp; Data – Socioeconomic Influences on County-Level Voting Trends in Presidential Elections (2000-2020)</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -78,13 +112,13 @@ ul.task-list li input[type="checkbox"] {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data</span></a></li></ol></nav>
-        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
-      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -149,7 +183,12 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#description" id="toc-description" class="nav-link active" data-scroll-target="#description"><span class="header-section-number">2.1</span> Description</a></li>
+  <li><a href="#description" id="toc-description" class="nav-link active" data-scroll-target="#description"><span class="header-section-number">2.1</span> Description</a>
+  <ul class="collapse">
+  <li><a href="#data-overview" id="toc-data-overview" class="nav-link" data-scroll-target="#data-overview"><span class="header-section-number">2.1.1</span> Data Overview</a></li>
+  <li><a href="#issues-or-problems" id="toc-issues-or-problems" class="nav-link" data-scroll-target="#issues-or-problems"><span class="header-section-number">2.1.2</span> Issues or Problems</a></li>
+  <li><a href="#data-import-plan" id="toc-data-import-plan" class="nav-link" data-scroll-target="#data-import-plan"><span class="header-section-number">2.1.3</span> Data Import Plan</a></li>
+  </ul></li>
   <li><a href="#missing-value-analysis" id="toc-missing-value-analysis" class="nav-link" data-scroll-target="#missing-value-analysis"><span class="header-section-number">2.2</span> Missing value analysis</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/lg3385/EDAV_project/edit/main/data.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/lg3385/EDAV_project/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -178,9 +217,152 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="description" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="description"><span class="header-section-number">2.1</span> Description</h2>
+<ol type="1">
+<li><p>The dataset, <code>countypres_2000-2020.csv</code>, provides county-level presidential election returns from 2000 to 2020. It is sourced from official state election data records and hosted on the <a href="https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/VOQCHQ">Harvard Dataverse</a>. The dataset was last updated on June 8, 2021.</p></li>
+<li><p>The dataset, <code>Education.csv</code>, provides information on county-level educational attainment data from 1970 to 2022. It is sourced from the USDA Economic Research Service’s County-Level Data Sets, available <a href="https://www.ers.usda.gov/data-products/county-level-data-sets/county-level-data-sets-download-data/">USDA</a>. The dataset was last updated on June 20, 2024.</p></li>
+<li><p>The dataset, <code>Unemployment.csv</code>, provides county-level unemployment rates from 2000 to 2022. It is sourced from the USDA Economic Research Service’s County-Level Data Sets, available <a href="https://www.ers.usda.gov/data-products/county-level-data-sets/county-level-data-sets-download-data/">USDA</a>. The dataset was last updated on June 20, 2024.</p></li>
+</ol>
+<section id="data-overview" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="data-overview"><span class="header-section-number">2.1.1</span> Data Overview</h3>
+<ol type="1">
+<li>The dataset, <code>countypres_2000-2020.csv</code>, contains the following variables:</li>
+</ol>
+<ul>
+<li><strong><code>year</code></strong>: election year</li>
+<li><strong><code>state</code></strong>: state name</li>
+<li><strong><code>state_po</code></strong>: U.S. postal code state abbreviation</li>
+<li><strong><code>county_name</code></strong>: county name</li>
+<li><strong><code>county_fips</code></strong>: county FIPS code</li>
+<li><strong><code>office</code></strong>: President</li>
+<li><strong><code>candidate</code></strong>: name of the candidate</li>
+<li><strong><code>party</code></strong>: party of the candidate; takes form of DEMOCRAT, REPUBLICAN, GREEN, LIBERTARIAN, or OTHER</li>
+<li><strong><code>candidatevotes</code></strong>: votes received by this candidate for this particular party</li>
+<li><strong><code>totalvotes</code></strong>: total number of votes cast in this county-year</li>
+<li><strong><code>mode</code></strong>: mode of ballots cast; default is TOTAL, with different modes specified for 2020</li>
+<li><strong><code>version</code></strong>: date when dataset was finalized</li>
+</ul>
+<ol start="2" type="1">
+<li>The dataset, <code>Education.csv</code>, contains the following variables:</li>
+</ol>
+<ul>
+<li><strong><code>FIPS Code</code></strong>: FIPS code</li>
+<li><strong><code>State</code></strong>: state abbreviation</li>
+<li><strong><code>Area name</code></strong>: name of state or county</li>
+<li><strong><code>Attribute</code></strong>: educational metric</li>
+<li><strong><code>Value</code></strong>: The corresponding value for the educational metric, typically as a percentage or count</li>
+</ul>
+<ol start="3" type="1">
+<li>The dataset, <code>Unemployment.csv</code>, contains the following variables:</li>
+</ol>
+<ul>
+<li><strong><code>FIPS_Code</code></strong>: FIPS code</li>
+<li><strong><code>State</code></strong>: state abbreviation</li>
+<li><strong><code>Area_Name</code></strong>: name of state or county</li>
+<li><strong><code>Attribute</code></strong>: unemployment-related metric</li>
+<li><strong><code>Value</code></strong>: The corresponding value for the unemployment metric, typically as a percentage or count</li>
+</ul>
+</section>
+<section id="issues-or-problems" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="issues-or-problems"><span class="header-section-number">2.1.2</span> Issues or Problems</h3>
+<ol type="1">
+<li><p><code>countypres_2000-2020.csv</code>: County results in Alaska for 2004 are based on official Alaska data, but it is clear the district returns significantly overstate the number of votes cast. In Alaska, the county_fips field stores a combination of state FIPS code and district.</p></li>
+<li><p><code>Education.csv</code>: Some attribute labels are ambiguous and may require clarification or mapping to standardized educational metrics.</p></li>
+<li><p><code>Unemployment.csv</code>: Inconsistencies in the naming of attributes could pose challenges in aligning the data with other sources.</p></li>
+</ol>
+</section>
+<section id="data-import-plan" class="level3" data-number="2.1.3">
+<h3 data-number="2.1.3" class="anchored" data-anchor-id="data-import-plan"><span class="header-section-number">2.1.3</span> Data Import Plan</h3>
+<ol type="1">
+<li><p>These data will be imported into R using <code>readr::read_csv()</code> for efficient loading and analysis.</p></li>
+<li><p>FIPS codes may be used to merge datasets.</p></li>
+</ol>
+</section>
 </section>
 <section id="missing-value-analysis" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="missing-value-analysis"><span class="header-section-number">2.2</span> Missing value analysis</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data_1 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"countypres_2000-2020.csv"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   72617 obs. of  12 variables:
+ $ year          : int  2000 2000 2000 2000 2000 2000 2000 2000 2000 2000 ...
+ $ state         : chr  "ALABAMA" "ALABAMA" "ALABAMA" "ALABAMA" ...
+ $ state_po      : chr  "AL" "AL" "AL" "AL" ...
+ $ county_name   : chr  "AUTAUGA" "AUTAUGA" "AUTAUGA" "AUTAUGA" ...
+ $ county_fips   : int  1001 1001 1001 1001 1003 1003 1003 1003 1005 1005 ...
+ $ office        : chr  "US PRESIDENT" "US PRESIDENT" "US PRESIDENT" "US PRESIDENT" ...
+ $ candidate     : chr  "AL GORE" "GEORGE W. BUSH" "RALPH NADER" "OTHER" ...
+ $ party         : chr  "DEMOCRAT" "REPUBLICAN" "GREEN" "OTHER" ...
+ $ candidatevotes: int  4942 11993 160 113 13997 40872 1033 578 5188 5096 ...
+ $ totalvotes    : int  17208 17208 17208 17208 56480 56480 56480 56480 10395 10395 ...
+ $ version       : int  20220315 20220315 20220315 20220315 20220315 20220315 20220315 20220315 20220315 20220315 ...
+ $ mode          : chr  "TOTAL" "TOTAL" "TOTAL" "TOTAL" ...</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>missing_summary <span class="ot">&lt;-</span> <span class="fu">colSums</span>(<span class="fu">is.na</span>(data_1))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(missing_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>          year          state       state_po    county_name    county_fips 
+             0              0              0              0             52 
+        office      candidate          party candidatevotes     totalvotes 
+             0              0              0              0              0 
+       version           mode 
+             0              0 </code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data_2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"Education.csv"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   169244 obs. of  5 variables:
+ $ FIPS.Code: int  0 0 0 0 0 0 0 0 0 0 ...
+ $ State    : chr  "US" "US" "US" "US" ...
+ $ Area.name: chr  "United States" "United States" "United States" "United States" ...
+ $ Attribute: chr  "Less than a high school diploma, 1970" "High school diploma only, 1970" "Some college (1-3 years), 1970" "Four years of college or higher, 1970" ...
+ $ Value    : num  5.24e+07 3.42e+07 1.17e+07 1.17e+07 4.77e+01 ...</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>missing_summary <span class="ot">&lt;-</span> <span class="fu">colSums</span>(<span class="fu">is.na</span>(data_2))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(missing_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>FIPS.Code     State Area.name Attribute     Value 
+        0         0         0         0         0 </code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>data_3 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"Unemployment.csv"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data_3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   316633 obs. of  5 variables:
+ $ FIPS_Code: int  0 0 0 0 0 0 0 0 0 0 ...
+ $ State    : chr  "US" "US" "US" "US" ...
+ $ Area_Name: chr  "United States" "United States" "United States" "United States" ...
+ $ Attribute: chr  "Civilian_labor_force_2000" "Employed_2000" "Unemployed_2000" "Unemployment_rate_2000" ...
+ $ Value    : num  1.43e+08 1.37e+08 5.70e+06 4.00 1.44e+08 ...</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>missing_summary <span class="ot">&lt;-</span> <span class="fu">colSums</span>(<span class="fu">is.na</span>(data_3))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(missing_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>FIPS_Code     State Area_Name Attribute     Value 
+        0         0         0         0         0 </code></pre>
+</div>
+</div>
 
 
 </section>
@@ -221,18 +403,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -264,7 +435,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -272,7 +465,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
