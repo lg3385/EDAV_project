@@ -79,6 +79,7 @@
 
 ## Missing value analysis
 
+1. The dataset `countypres_2000-2020.csv`
 ```{r}
 data_1 <- read.csv("countypres_2000-2020.csv")
 str(data_1)
@@ -87,6 +88,7 @@ missing_summary <- colSums(is.na(data_1))
 print(missing_summary)
 ```
 
+2. The dataset `Education.csv`
 ```{r}
 data_2 <- read.csv("Education.csv")
 str(data_2)
@@ -95,6 +97,7 @@ missing_summary <- colSums(is.na(data_2))
 print(missing_summary)
 ```
 
+3. The dataset `Unemployment.csv`
 ```{r}
 data_3 <- read.csv("Unemployment.csv")
 str(data_3)
@@ -103,10 +106,15 @@ missing_summary <- colSums(is.na(data_3))
 print(missing_summary)
 ```
 
+4. The datasets `estxxALL.csv`
 ```{r}
-data_4 <- read.csv("est04ALL.csv")
-head(data_4)
+data_04 <- read.csv("est04ALL.csv")
+data_08 <- read.csv("est08ALL.csv")
+data_12 <- read.csv("est12ALL.csv")
+data_16 <- read.csv("est16ALL.csv")
+data_20 <- read.csv("est20ALL.csv")
 
-
+head(data_04)
+str(data_04)
 ```
 

@@ -221,6 +221,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>The dataset, <code>countypres_2000-2020.csv</code>, provides county-level presidential election returns from 2000 to 2020. It is sourced from official state election data records and hosted on the <a href="https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/VOQCHQ">Harvard Dataverse</a>. The dataset was last updated on June 8, 2021.</p></li>
 <li><p>The dataset, <code>Education.csv</code>, provides information on county-level educational attainment data from 1970 to 2022. It is sourced from the USDA Economic Research Service’s County-Level Data Sets, available <a href="https://www.ers.usda.gov/data-products/county-level-data-sets/county-level-data-sets-download-data/">USDA</a>. The dataset was last updated on June 20, 2024.</p></li>
 <li><p>The dataset, <code>Unemployment.csv</code>, provides county-level unemployment rates from 2000 to 2022. It is sourced from the USDA Economic Research Service’s County-Level Data Sets, available <a href="https://www.ers.usda.gov/data-products/county-level-data-sets/county-level-data-sets-download-data/">USDA</a>. The dataset was last updated on June 20, 2024.</p></li>
+<li><p>The datasets: <code>est04ALL.csv</code>, <code>est08ALL.csv</code>, <code>est12ALL.csv</code>, <code>est16ALL.csv</code>, <code>est20ALL.csv</code>, provide annual Small Area Income and Poverty Estimates (SAIPE) for counties in the United States. These datasets are sourced from the U.S. Census Bureau’s SAIPE program and are available <a href="https://www.census.gov/programs-surveys/saipe/data/datasets.html">SAIPE</a>. The datasets were last updated on October 8, 2021</p></li>
 </ol>
 <section id="data-overview" class="level3" data-number="2.1.1">
 <h3 data-number="2.1.1" class="anchored" data-anchor-id="data-overview"><span class="header-section-number">2.1.1</span> Data Overview</h3>
@@ -261,6 +262,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong><code>Attribute</code></strong>: unemployment-related metric</li>
 <li><strong><code>Value</code></strong>: The corresponding value for the unemployment metric, typically as a percentage or count</li>
 </ul>
+<ol start="4" type="1">
+<li>The datasets, <code>estxxALL.csv</code>, contain the following variables:</li>
+</ol>
+<ul>
+<li><strong><code>State FIPS</code></strong>: state FIPS code</li>
+<li><strong><code>County FIPS</code></strong>: county FIPS code</li>
+<li><strong><code>Postal</code></strong>: U.S. postal code state abbreviation</li>
+<li><strong><code>Name</code></strong>: name of the county</li>
+<li><strong><code>Poverty Estimate All Ages</code></strong>: estimated number of people of all ages living in poverty</li>
+<li><strong><code>Poverty Percent All Ages</code></strong>: estimated percentage of people of all ages living in poverty</li>
+<li><strong><code>Poverty Estimate Under Age 18</code></strong>: estimated number of children under 18 living in poverty</li>
+<li><strong><code>Poverty Percent Under Age 18</code></strong>: estimated percentage of children under 18 living in poverty</li>
+<li><strong><code>Poverty Estimate Ages 5-17</code></strong>: estimated number of children aged 5-17 living in poverty</li>
+<li><strong><code>Poverty Percent Ages 5-17</code></strong>: estimated percentage of children aged 5-17 living in poverty</li>
+<li><strong><code>Median Household Income</code></strong>: estimated median household income for the county</li>
+<li><strong><code>Poverty Estimate Ages 0-4</code></strong>: estimated number of children aged 0-4 living in poverty</li>
+<li><strong><code>Poverty Percent Ages 0-4</code></strong>: estimated percentage of children aged 0-4 living in poverty</li>
+<li><strong><code>90% CI Lower Bound</code></strong>: lower bound of the 90% confidence interval for poverty estimates</li>
+<li><strong><code>90% CI Upper Bound</code></strong>: upper bound of the 90% confidence interval for poverty estimates</li>
+</ul>
 </section>
 <section id="issues-or-problems" class="level3" data-number="2.1.2">
 <h3 data-number="2.1.2" class="anchored" data-anchor-id="issues-or-problems"><span class="header-section-number">2.1.2</span> Issues or Problems</h3>
@@ -268,6 +289,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p><code>countypres_2000-2020.csv</code>: County results in Alaska for 2004 are based on official Alaska data, but it is clear the district returns significantly overstate the number of votes cast. In Alaska, the county_fips field stores a combination of state FIPS code and district.</p></li>
 <li><p><code>Education.csv</code>: Some attribute labels are ambiguous and may require clarification or mapping to standardized educational metrics.</p></li>
 <li><p><code>Unemployment.csv</code>: Inconsistencies in the naming of attributes could pose challenges in aligning the data with other sources.</p></li>
+<li><p><code>estxxALL.csv</code>: Attribute labels may vary slightly across years, requiring careful alignment when merging multiple years.</p></li>
 </ol>
 </section>
 <section id="data-import-plan" class="level3" data-number="2.1.3">
@@ -280,6 +302,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="missing-value-analysis" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="missing-value-analysis"><span class="header-section-number">2.2</span> Missing value analysis</h2>
+<ol type="1">
+<li>The dataset <code>countypres_2000-2020.csv</code></li>
+</ol>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -315,6 +340,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
              0              0 </code></pre>
 </div>
 </div>
+<ol start="2" type="1">
+<li>The dataset <code>Education.csv</code></li>
+</ol>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -339,6 +367,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         0         0         0         0         0 </code></pre>
 </div>
 </div>
+<ol start="3" type="1">
+<li>The dataset <code>Unemployment.csv</code></li>
+</ol>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -361,6 +392,138 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>FIPS_Code     State Area_Name Attribute     Value 
         0         0         0         0         0 </code></pre>
+</div>
+</div>
+<ol start="4" type="1">
+<li>The datasets <code>estxxALL.csv</code></li>
+</ol>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>data_04 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"est04ALL.csv"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>data_08 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"est08ALL.csv"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>data_12 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"est12ALL.csv"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>data_16 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"est16ALL.csv"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>data_20 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"est20ALL.csv"</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data_04)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Table.1..2004.Poverty.and.Median.Income.Estimates...Counties.............................Source..U.S..Census.Bureau..Small.Area.Estimates.Branch..............................Release.date..12.20.2006
+1                                                                                                                                                                                             State FIPS
+2                                                                                                                                                                                                     00
+3                                                                                                                                                                                                     01
+4                                                                                                                                                                                                     01
+5                                                                                                                                                                                                     01
+6                                                                                                                                                                                                     01
+            X    X.1            X.2                       X.3
+1 County FIPS Postal           Name Poverty Estimate All Ages
+2         000     US  United States                37,039,804
+3         000     AL        Alabama                   717,483
+4         001     AL Autauga County                     5,627
+5         003     AL Baldwin County                    16,089
+6         005     AL Barbour County                     6,109
+                 X.4                X.5                      X.6
+1 90% CI Lower Bound 90% CI Upper Bound Poverty Percent All Ages
+2         36,359,662         37,719,946                     12.7
+3            675,992            758,974                     16.1
+4              4,340              6,914                     11.6
+5             12,434             19,744                     10.0
+6              4,685              7,533                     23.9
+                 X.7                X.8                           X.9
+1 90% CI Lower Bound 90% CI Upper Bound Poverty Estimate Under Age 18
+2               12.5               13.0                    13,041,492
+3               15.1               17.0                       245,017
+4                8.9               14.3                         2,041
+5                7.7               12.3                         5,415
+6               18.3               29.4                         2,024
+                X.10               X.11                         X.12
+1 90% CI Lower Bound 90% CI Upper Bound Poverty Percent Under Age 18
+2         12,694,086         13,388,898                         17.8
+3            226,152            263,881                         22.6
+4              1,518              2,565                         16.3
+5              4,019              6,812                         14.9
+6              1,494              2,555                         31.1
+                X.13               X.14                       X.15
+1 90% CI Lower Bound 90% CI Upper Bound Poverty Estimate Ages 5-17
+2               17.3               18.3                  8,430,886
+3               20.9               24.4                    160,787
+4               12.1               20.5                      1,328
+5               11.1               18.8                      3,521
+6               22.9               39.2                      1,329
+                X.16               X.17                      X.18
+1 90% CI Lower Bound 90% CI Upper Bound Poverty Percent Ages 5-17
+2          8,142,299          8,719,473                      16.2
+3            143,834            177,740                      20.7
+4                938              1,718                      14.4
+5              2,484              4,558                      13.3
+6                931              1,727                      28.0
+                X.19               X.20                    X.21
+1 90% CI Lower Bound 90% CI Upper Bound Median Household Income
+2               15.6               16.7                  44,334
+3               18.5               22.9                  37,062
+4               10.2               18.6                  45,379
+5                9.4               17.3                  42,227
+6               19.6               36.4                  26,495
+                X.22               X.23                      X.24
+1 90% CI Lower Bound 90% CI Upper Bound Poverty Estimate Ages 0-4
+2             44,012             44,656                 4,123,715
+3             35,614             38,510                    77,330
+4             42,625             48,310                          
+5             39,726             44,886                          
+6             24,830             28,272                          
+                X.25               X.26                     X.27
+1 90% CI Lower Bound 90% CI Upper Bound Poverty Percent Ages 0-4
+2          3,917,910          4,329,520                     20.5
+3             68,732             85,928                     26.2
+4                                                               
+5                                                               
+6                                                               
+                X.28               X.29
+1 90% CI Lower Bound 90% CI Upper Bound
+2               19.5               21.5
+3               23.3               29.1
+4                                      
+5                                      
+6                                      </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data_04)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   3194 obs. of  31 variables:
+ $ Table.1..2004.Poverty.and.Median.Income.Estimates...Counties.............................Source..U.S..Census.Bureau..Small.Area.Estimates.Branch..............................Release.date..12.20.2006: chr  "State FIPS" "00" "01" "01" ...
+ $ X                                                                                                                                                                                                     : chr  "County FIPS" "000" "000" "001" ...
+ $ X.1                                                                                                                                                                                                   : chr  "Postal" "US" "AL" "AL" ...
+ $ X.2                                                                                                                                                                                                   : chr  "Name" "United States" "Alabama" "Autauga County" ...
+ $ X.3                                                                                                                                                                                                   : chr  "Poverty Estimate All Ages" "37,039,804" "717,483" "5,627" ...
+ $ X.4                                                                                                                                                                                                   : chr  "90% CI Lower Bound" "36,359,662" "675,992" "4,340" ...
+ $ X.5                                                                                                                                                                                                   : chr  "90% CI Upper Bound" "37,719,946" "758,974" "6,914" ...
+ $ X.6                                                                                                                                                                                                   : chr  "Poverty Percent All Ages" "12.7" "16.1" "11.6" ...
+ $ X.7                                                                                                                                                                                                   : chr  "90% CI Lower Bound" "12.5" "15.1" "8.9" ...
+ $ X.8                                                                                                                                                                                                   : chr  "90% CI Upper Bound" "13.0" "17.0" "14.3" ...
+ $ X.9                                                                                                                                                                                                   : chr  "Poverty Estimate Under Age 18" "13,041,492" "245,017" "2,041" ...
+ $ X.10                                                                                                                                                                                                  : chr  "90% CI Lower Bound" "12,694,086" "226,152" "1,518" ...
+ $ X.11                                                                                                                                                                                                  : chr  "90% CI Upper Bound" "13,388,898" "263,881" "2,565" ...
+ $ X.12                                                                                                                                                                                                  : chr  "Poverty Percent Under Age 18" "17.8" "22.6" "16.3" ...
+ $ X.13                                                                                                                                                                                                  : chr  "90% CI Lower Bound" "17.3" "20.9" "12.1" ...
+ $ X.14                                                                                                                                                                                                  : chr  "90% CI Upper Bound" "18.3" "24.4" "20.5" ...
+ $ X.15                                                                                                                                                                                                  : chr  "Poverty Estimate Ages 5-17" "8,430,886" "160,787" "1,328" ...
+ $ X.16                                                                                                                                                                                                  : chr  "90% CI Lower Bound" "8,142,299" "143,834" "938" ...
+ $ X.17                                                                                                                                                                                                  : chr  "90% CI Upper Bound" "8,719,473" "177,740" "1,718" ...
+ $ X.18                                                                                                                                                                                                  : chr  "Poverty Percent Ages 5-17" "16.2" "20.7" "14.4" ...
+ $ X.19                                                                                                                                                                                                  : chr  "90% CI Lower Bound" "15.6" "18.5" "10.2" ...
+ $ X.20                                                                                                                                                                                                  : chr  "90% CI Upper Bound" "16.7" "22.9" "18.6" ...
+ $ X.21                                                                                                                                                                                                  : chr  "Median Household Income" "44,334" "37,062" "45,379" ...
+ $ X.22                                                                                                                                                                                                  : chr  "90% CI Lower Bound" "44,012" "35,614" "42,625" ...
+ $ X.23                                                                                                                                                                                                  : chr  "90% CI Upper Bound" "44,656" "38,510" "48,310" ...
+ $ X.24                                                                                                                                                                                                  : chr  "Poverty Estimate Ages 0-4" "4,123,715" "77,330" "" ...
+ $ X.25                                                                                                                                                                                                  : chr  "90% CI Lower Bound" "3,917,910" "68,732" "" ...
+ $ X.26                                                                                                                                                                                                  : chr  "90% CI Upper Bound" "4,329,520" "85,928" "" ...
+ $ X.27                                                                                                                                                                                                  : chr  "Poverty Percent Ages 0-4" "20.5" "26.2" "" ...
+ $ X.28                                                                                                                                                                                                  : chr  "90% CI Lower Bound" "19.5" "23.3" "" ...
+ $ X.29                                                                                                                                                                                                  : chr  "90% CI Upper Bound" "21.5" "29.1" "" ...</code></pre>
 </div>
 </div>
 
