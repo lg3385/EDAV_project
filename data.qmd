@@ -8,6 +8,8 @@
 
 3. The dataset, `Unemployment.csv`, provides county-level unemployment rates from 2000 to 2022. It is sourced from the USDA Economic Research Service's County-Level Data Sets, available [USDA ](https://www.ers.usda.gov/data-products/county-level-data-sets/county-level-data-sets-download-data/). The dataset was last updated on June 20, 2024.
 
+4. The datasets: `est04ALL.csv`, `est08ALL.csv`, `est12ALL.csv`, `est16ALL.csv`, `est20ALL.csv`, provide annual Small Area Income and Poverty Estimates (SAIPE) for counties in the United States. These datasets are sourced from the U.S. Census Bureau's SAIPE program and are available [SAIPE](https://www.census.gov/programs-surveys/saipe/data/datasets.html). The datasets were last updated on October 8, 2021
+
 
 ### Data Overview
 
@@ -39,6 +41,23 @@
 - **`Attribute`**: unemployment-related metric
 - **`Value `**: The corresponding value for the unemployment metric, typically as a percentage or count
 
+4. The datasets, `estxxALL.csv`, contain the following variables:
+- **`State FIPS`**: state FIPS code
+- **`County FIPS`**: county FIPS code
+- **`Postal`**: U.S. postal code state abbreviation
+- **`Name`**: name of the county
+- **`Poverty Estimate All Ages`**: estimated number of people of all ages living in poverty
+- **`Poverty Percent All Ages`**: estimated percentage of people of all ages living in poverty
+- **`Poverty Estimate Under Age 18`**: estimated number of children under 18 living in poverty
+- **`Poverty Percent Under Age 18`**: estimated percentage of children under 18 living in poverty
+- **`Poverty Estimate Ages 5-17`**: estimated number of children aged 5-17 living in poverty
+- **`Poverty Percent Ages 5-17`**: estimated percentage of children aged 5-17 living in poverty
+- **`Median Household Income`**: estimated median household income for the county
+- **`Poverty Estimate Ages 0-4`**: estimated number of children aged 0-4 living in poverty
+- **`Poverty Percent Ages 0-4`**: estimated percentage of children aged 0-4 living in poverty
+- **`90% CI Lower Bound`**: lower bound of the 90% confidence interval for poverty estimates
+- **`90% CI Upper Bound`**: upper bound of the 90% confidence interval for poverty estimates
+
 
 ### Issues or Problems
 
@@ -47,6 +66,8 @@
 2. `Education.csv`: Some attribute labels are ambiguous and may require clarification or mapping to standardized educational metrics.
 
 3. `Unemployment.csv`: Inconsistencies in the naming of attributes could pose challenges in aligning the data with other sources.
+
+4. `estxxALL.csv`: Attribute labels may vary slightly across years, requiring careful alignment when merging multiple years.
 
 
 ### Data Import Plan
@@ -80,5 +101,12 @@ str(data_3)
 
 missing_summary <- colSums(is.na(data_3))
 print(missing_summary)
+```
+
+```{r}
+data_4 <- read.csv("est04ALL.csv")
+head(data_4)
+
+
 ```
 
