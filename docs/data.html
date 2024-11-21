@@ -309,223 +309,190 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data_1 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"countypres_2000-2020.csv"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># missing_summary &lt;- colSums(is.na(data_1))</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># print(missing_summary)</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressWarnings</span>(<span class="fu">library</span>(naniar))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_var</span>(data_1) <span class="sc">+</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Missing Values by Variable"</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Visualizing missing data in each column"</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>'data.frame':   72617 obs. of  12 variables:
- $ year          : int  2000 2000 2000 2000 2000 2000 2000 2000 2000 2000 ...
- $ state         : chr  "ALABAMA" "ALABAMA" "ALABAMA" "ALABAMA" ...
- $ state_po      : chr  "AL" "AL" "AL" "AL" ...
- $ county_name   : chr  "AUTAUGA" "AUTAUGA" "AUTAUGA" "AUTAUGA" ...
- $ county_fips   : int  1001 1001 1001 1001 1003 1003 1003 1003 1005 1005 ...
- $ office        : chr  "US PRESIDENT" "US PRESIDENT" "US PRESIDENT" "US PRESIDENT" ...
- $ candidate     : chr  "AL GORE" "GEORGE W. BUSH" "RALPH NADER" "OTHER" ...
- $ party         : chr  "DEMOCRAT" "REPUBLICAN" "GREEN" "OTHER" ...
- $ candidatevotes: int  4942 11993 160 113 13997 40872 1033 578 5188 5096 ...
- $ totalvotes    : int  17208 17208 17208 17208 56480 56480 56480 56480 10395 10395 ...
- $ version       : int  20220315 20220315 20220315 20220315 20220315 20220315 20220315 20220315 20220315 20220315 ...
- $ mode          : chr  "TOTAL" "TOTAL" "TOTAL" "TOTAL" ...</code></pre>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>missing_summary <span class="ot">&lt;-</span> <span class="fu">colSums</span>(<span class="fu">is.na</span>(data_1))</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(missing_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_case</span>(data_1) <span class="sc">+</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Missing Data Patterns Across Rows"</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Number of missing values per row"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>          year          state       state_po    county_name    county_fips 
-             0              0              0              0             52 
-        office      candidate          party candidatevotes     totalvotes 
-             0              0              0              0              0 
-       version           mode 
-             0              0 </code></pre>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-1-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
 </div>
+</div>
+<blockquote class="blockquote">
+<p>The dataset was inspected for missing values using gg_miss_var and gg_miss_case visualizations. It was identified that the county_fips column had 52 missing values, while all other variables were complete.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>Rows with missing county_fips values were extracted and examined. It was observed that these rows corresponded to non-county entities, such as STATEWIDE WRITEIN: Aggregate votes for write-in candidates across a state. MAINE UOCAVA: Special votes under the Uniformed and Overseas Citizens Absentee Voting Act. FEDERAL PRECINCT: Votes from federal precincts, often representing overseas or military ballots. These rows do not represent actual counties and therefore lack valid county_fips codes.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>Since the rows with missing county_fips do not correspond to geographic counties, they were considered irrelevant for a county-level analysis. The rows were excluded from the dataset to maintain consistency and focus on valid county-level observations.</p>
+</blockquote>
 <ol start="2" type="1">
 <li>The dataset <code>Education.csv</code></li>
 </ol>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data_2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"Education.csv"</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data_2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"Education.csv"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># missing_summary &lt;- colSums(is.na(data_2))</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># print(missing_summary)</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_var</span>(data_2) <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Missing Values by Variable"</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Visualizing missing data in each column"</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>'data.frame':   169244 obs. of  5 variables:
- $ FIPS.Code: int  0 0 0 0 0 0 0 0 0 0 ...
- $ State    : chr  "US" "US" "US" "US" ...
- $ Area.name: chr  "United States" "United States" "United States" "United States" ...
- $ Attribute: chr  "Less than a high school diploma, 1970" "High school diploma only, 1970" "Some college (1-3 years), 1970" "Four years of college or higher, 1970" ...
- $ Value    : num  5.24e+07 3.42e+07 1.17e+07 1.17e+07 4.77e+01 ...</code></pre>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>missing_summary <span class="ot">&lt;-</span> <span class="fu">colSums</span>(<span class="fu">is.na</span>(data_2))</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(missing_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_case</span>(data_2) <span class="sc">+</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Missing Data Patterns Across Rows"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Number of missing values per row"</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>FIPS.Code     State Area.name Attribute     Value 
-        0         0         0         0         0 </code></pre>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
 </div>
+</div>
+<blockquote class="blockquote">
+<p>The dataset was inspected for missing values using gg_miss_var and gg_miss_case visualizations. It was identified that the dataset contains no missing values in any of its columns.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>Since the dataset is complete, it requires no cleaning related to missing values and is ready for integration with other datasets or further analysis.</p>
+</blockquote>
 <ol start="3" type="1">
 <li>The dataset <code>Unemployment.csv</code></li>
 </ol>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>data_3 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"Unemployment.csv"</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data_3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data_3 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"Unemployment.csv"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># missing_summary &lt;- colSums(is.na(data_3))</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># print(missing_summary)</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_var</span>(data_3) <span class="sc">+</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Missing Values by Variable"</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Visualizing missing data in each column"</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>'data.frame':   316633 obs. of  5 variables:
- $ FIPS_Code: int  0 0 0 0 0 0 0 0 0 0 ...
- $ State    : chr  "US" "US" "US" "US" ...
- $ Area_Name: chr  "United States" "United States" "United States" "United States" ...
- $ Attribute: chr  "Civilian_labor_force_2000" "Employed_2000" "Unemployed_2000" "Unemployment_rate_2000" ...
- $ Value    : num  1.43e+08 1.37e+08 5.70e+06 4.00 1.44e+08 ...</code></pre>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>missing_summary <span class="ot">&lt;-</span> <span class="fu">colSums</span>(<span class="fu">is.na</span>(data_3))</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(missing_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_case</span>(data_3) <span class="sc">+</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Missing Data Patterns Across Rows"</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Number of missing values per row"</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>FIPS_Code     State Area_Name Attribute     Value 
-        0         0         0         0         0 </code></pre>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-3-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
 </div>
+</div>
+<blockquote class="blockquote">
+<p>The dataset was inspected for missing values using gg_miss_var and gg_miss_case visualizations. It was identified that the dataset contains no missing values in any of its columns.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>Since the dataset is complete, it requires no cleaning related to missing values and is ready for integration with other datasets or further analysis.</p>
+</blockquote>
 <ol start="4" type="1">
 <li>The datasets <code>estxxALL.csv</code></li>
 </ol>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>data_04 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"est04ALL.csv"</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>data_08 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"est08ALL.csv"</span>)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>data_12 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"est12ALL.csv"</span>)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>data_16 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"est16ALL.csv"</span>)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>data_20 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"est20ALL.csv"</span>)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data_04)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data_04 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"est04ALL.csv"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>data_08 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"est08ALL.csv"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>data_12 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"est12ALL.csv"</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>data_16 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"est16ALL.csv"</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>data_20 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"est20ALL.csv"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># missing_summary &lt;- colSums(is.na(data_04))</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># print(missing_summary)</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_var</span>(data_20) <span class="sc">+</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Missing Values by Variable"</span>,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Visualizing missing data in each column"</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>  Table.1..2004.Poverty.and.Median.Income.Estimates...Counties.............................Source..U.S..Census.Bureau..Small.Area.Estimates.Branch..............................Release.date..12.20.2006
-1                                                                                                                                                                                             State FIPS
-2                                                                                                                                                                                                     00
-3                                                                                                                                                                                                     01
-4                                                                                                                                                                                                     01
-5                                                                                                                                                                                                     01
-6                                                                                                                                                                                                     01
-            X    X.1            X.2                       X.3
-1 County FIPS Postal           Name Poverty Estimate All Ages
-2         000     US  United States                37,039,804
-3         000     AL        Alabama                   717,483
-4         001     AL Autauga County                     5,627
-5         003     AL Baldwin County                    16,089
-6         005     AL Barbour County                     6,109
-                 X.4                X.5                      X.6
-1 90% CI Lower Bound 90% CI Upper Bound Poverty Percent All Ages
-2         36,359,662         37,719,946                     12.7
-3            675,992            758,974                     16.1
-4              4,340              6,914                     11.6
-5             12,434             19,744                     10.0
-6              4,685              7,533                     23.9
-                 X.7                X.8                           X.9
-1 90% CI Lower Bound 90% CI Upper Bound Poverty Estimate Under Age 18
-2               12.5               13.0                    13,041,492
-3               15.1               17.0                       245,017
-4                8.9               14.3                         2,041
-5                7.7               12.3                         5,415
-6               18.3               29.4                         2,024
-                X.10               X.11                         X.12
-1 90% CI Lower Bound 90% CI Upper Bound Poverty Percent Under Age 18
-2         12,694,086         13,388,898                         17.8
-3            226,152            263,881                         22.6
-4              1,518              2,565                         16.3
-5              4,019              6,812                         14.9
-6              1,494              2,555                         31.1
-                X.13               X.14                       X.15
-1 90% CI Lower Bound 90% CI Upper Bound Poverty Estimate Ages 5-17
-2               17.3               18.3                  8,430,886
-3               20.9               24.4                    160,787
-4               12.1               20.5                      1,328
-5               11.1               18.8                      3,521
-6               22.9               39.2                      1,329
-                X.16               X.17                      X.18
-1 90% CI Lower Bound 90% CI Upper Bound Poverty Percent Ages 5-17
-2          8,142,299          8,719,473                      16.2
-3            143,834            177,740                      20.7
-4                938              1,718                      14.4
-5              2,484              4,558                      13.3
-6                931              1,727                      28.0
-                X.19               X.20                    X.21
-1 90% CI Lower Bound 90% CI Upper Bound Median Household Income
-2               15.6               16.7                  44,334
-3               18.5               22.9                  37,062
-4               10.2               18.6                  45,379
-5                9.4               17.3                  42,227
-6               19.6               36.4                  26,495
-                X.22               X.23                      X.24
-1 90% CI Lower Bound 90% CI Upper Bound Poverty Estimate Ages 0-4
-2             44,012             44,656                 4,123,715
-3             35,614             38,510                    77,330
-4             42,625             48,310                          
-5             39,726             44,886                          
-6             24,830             28,272                          
-                X.25               X.26                     X.27
-1 90% CI Lower Bound 90% CI Upper Bound Poverty Percent Ages 0-4
-2          3,917,910          4,329,520                     20.5
-3             68,732             85,928                     26.2
-4                                                               
-5                                                               
-6                                                               
-                X.28               X.29
-1 90% CI Lower Bound 90% CI Upper Bound
-2               19.5               21.5
-3               23.3               29.1
-4                                      
-5                                      
-6                                      </code></pre>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data_04)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_case</span>(data_20) <span class="sc">+</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Missing Data Patterns Across Rows"</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Number of missing values per row"</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>'data.frame':   3194 obs. of  31 variables:
- $ Table.1..2004.Poverty.and.Median.Income.Estimates...Counties.............................Source..U.S..Census.Bureau..Small.Area.Estimates.Branch..............................Release.date..12.20.2006: chr  "State FIPS" "00" "01" "01" ...
- $ X                                                                                                                                                                                                     : chr  "County FIPS" "000" "000" "001" ...
- $ X.1                                                                                                                                                                                                   : chr  "Postal" "US" "AL" "AL" ...
- $ X.2                                                                                                                                                                                                   : chr  "Name" "United States" "Alabama" "Autauga County" ...
- $ X.3                                                                                                                                                                                                   : chr  "Poverty Estimate All Ages" "37,039,804" "717,483" "5,627" ...
- $ X.4                                                                                                                                                                                                   : chr  "90% CI Lower Bound" "36,359,662" "675,992" "4,340" ...
- $ X.5                                                                                                                                                                                                   : chr  "90% CI Upper Bound" "37,719,946" "758,974" "6,914" ...
- $ X.6                                                                                                                                                                                                   : chr  "Poverty Percent All Ages" "12.7" "16.1" "11.6" ...
- $ X.7                                                                                                                                                                                                   : chr  "90% CI Lower Bound" "12.5" "15.1" "8.9" ...
- $ X.8                                                                                                                                                                                                   : chr  "90% CI Upper Bound" "13.0" "17.0" "14.3" ...
- $ X.9                                                                                                                                                                                                   : chr  "Poverty Estimate Under Age 18" "13,041,492" "245,017" "2,041" ...
- $ X.10                                                                                                                                                                                                  : chr  "90% CI Lower Bound" "12,694,086" "226,152" "1,518" ...
- $ X.11                                                                                                                                                                                                  : chr  "90% CI Upper Bound" "13,388,898" "263,881" "2,565" ...
- $ X.12                                                                                                                                                                                                  : chr  "Poverty Percent Under Age 18" "17.8" "22.6" "16.3" ...
- $ X.13                                                                                                                                                                                                  : chr  "90% CI Lower Bound" "17.3" "20.9" "12.1" ...
- $ X.14                                                                                                                                                                                                  : chr  "90% CI Upper Bound" "18.3" "24.4" "20.5" ...
- $ X.15                                                                                                                                                                                                  : chr  "Poverty Estimate Ages 5-17" "8,430,886" "160,787" "1,328" ...
- $ X.16                                                                                                                                                                                                  : chr  "90% CI Lower Bound" "8,142,299" "143,834" "938" ...
- $ X.17                                                                                                                                                                                                  : chr  "90% CI Upper Bound" "8,719,473" "177,740" "1,718" ...
- $ X.18                                                                                                                                                                                                  : chr  "Poverty Percent Ages 5-17" "16.2" "20.7" "14.4" ...
- $ X.19                                                                                                                                                                                                  : chr  "90% CI Lower Bound" "15.6" "18.5" "10.2" ...
- $ X.20                                                                                                                                                                                                  : chr  "90% CI Upper Bound" "16.7" "22.9" "18.6" ...
- $ X.21                                                                                                                                                                                                  : chr  "Median Household Income" "44,334" "37,062" "45,379" ...
- $ X.22                                                                                                                                                                                                  : chr  "90% CI Lower Bound" "44,012" "35,614" "42,625" ...
- $ X.23                                                                                                                                                                                                  : chr  "90% CI Upper Bound" "44,656" "38,510" "48,310" ...
- $ X.24                                                                                                                                                                                                  : chr  "Poverty Estimate Ages 0-4" "4,123,715" "77,330" "" ...
- $ X.25                                                                                                                                                                                                  : chr  "90% CI Lower Bound" "3,917,910" "68,732" "" ...
- $ X.26                                                                                                                                                                                                  : chr  "90% CI Upper Bound" "4,329,520" "85,928" "" ...
- $ X.27                                                                                                                                                                                                  : chr  "Poverty Percent Ages 0-4" "20.5" "26.2" "" ...
- $ X.28                                                                                                                                                                                                  : chr  "90% CI Lower Bound" "19.5" "23.3" "" ...
- $ X.29                                                                                                                                                                                                  : chr  "90% CI Upper Bound" "21.5" "29.1" "" ...</code></pre>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="data_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
 </div>
+</div>
+<blockquote class="blockquote">
+<p>The datasets were inspected for missing values using gg_miss_var and gg_miss_case visualizations. We found datasets contain no missing values in any of its columns.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>Since the datasets are complete, they require no cleaning related to missing values and are ready for integration with other datasets or further analysis.</p>
+</blockquote>
 
 
 </section>
