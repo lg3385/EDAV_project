@@ -1,1 +1,151 @@
 # Results
+```{r}
+#Loading data sets
+pres_res <- read.csv("countypres_2000-2020.csv")
+unemployment_data <- read.csv("Unemployment.csv")
+education_data <- read.csv("Education.csv")
+saipe_04 <- read.csv("est04ALL.csv")
+saipe_08 <- read.csv("est08ALL.csv")
+saipe_12 <- read.csv("est12ALL.csv")
+saipe_16 <- read.csv("est16ALL.csv")
+saipe_20 <- read.csv("est20ALL.csv")
+```
+
+```{r}
+head(pres_res, n = 20)
+```
+
+```{r}
+head(education_data, n = 1000)
+# Replace 'Attribute' with the name of the column you want to check
+unique_values <- unique(education_data$Attribute)
+
+# View the unique values
+print(unique_values)
+
+```
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+
+```
+
+```{r}
+# Add a year column to the education data based on the Attribute
+education_data <- education_data |>
+  mutate(
+    year = case_when(
+      grepl("2000$", Attribute) ~ 2000,
+      grepl("2008-12$", Attribute) ~ 2012,
+      grepl("2018-22$", Attribute) ~ 2020,
+      TRUE ~ NA_integer_
+    )
+  ) |>
+  filter(!is.na(year)) # Remove rows without a matching year
+
+# Filter relevant attributes and reshape data to long format
+education_data_cleaned <- education_data |>
+  filter(Attribute %in% c(
+    "Percent of adults with less than a high school diploma, 2000",
+    "Percent of adults with a high school diploma only, 2000",
+    "Percent of adults completing some college or associate's degree, 2000",
+    "Percent of adults with a bachelor's degree or higher, 2000",
+    "Percent of adults with less than a high school diploma, 2008-12",
+    "Percent of adults with a high school diploma only, 2008-12",
+    "Percent of adults completing some college or associate's degree, 2008-12",
+    "Percent of adults with a bachelor's degree or higher, 2008-12",
+    "Percent of adults with less than a high school diploma, 2018-22",
+    "Percent of adults with a high school diploma only, 2018-22",
+    "Percent of adults completing some college or associate's degree, 2018-22",
+    "Percent of adults with a bachelor's degree or higher, 2018-22"
+  )) |>
+  separate(Attribute, into = c("Level", "Year"), sep = ", (?=\\d)") |>
+  select(FIPS.Code, Level, Value, year) # Keep essential columns only
+
+# Merge the reshaped education data with pres_res based on year and FIPS code
+pres_education <- pres_res |>
+  inner_join(education_data_cleaned, by = c("county_fips" = "FIPS.Code", "year"))
+
+# View combined dataset
+head(pres_education)
+
+```
+```{r}
+head(pres_education, n=40)
+```
+
+## Correlation Between College Education and Vote Share by Party and Year
+```{r}
+library(dplyr)
+library(tidyr)
+
+# Add a year column to the education data based on the Attribute
+education_data <- education_data |>
+  mutate(
+    year = case_when(
+      grepl("2000$", Attribute) ~ 2000,
+      grepl("2008-12$", Attribute) ~ 2012,
+      grepl("2018-22$", Attribute) ~ 2020,
+      TRUE ~ NA_integer_
+    )
+  ) |>
+  filter(!is.na(year)) # Remove rows without a matching year
+
+# Filter relevant attributes and calculate the total "go_to_college" for each FIPS.Code and year
+education_data_cleaned <- education_data |>
+  filter(Attribute %in% c(
+    "Percent of adults completing some college or associate's degree, 2000",
+    "Percent of adults with a bachelor's degree or higher, 2000",
+    "Percent of adults completing some college or associate's degree, 2008-12",
+    "Percent of adults with a bachelor's degree or higher, 2008-12",
+    "Percent of adults completing some college or associate's degree, 2018-22",
+    "Percent of adults with a bachelor's degree or higher, 2018-22"
+  )) |>
+  group_by(FIPS.Code, year) |>
+  summarize(go_to_college = sum(Value, na.rm = TRUE), .groups = "drop") # Sum values for the two levels
+
+# Merge with pres_res
+pres_college <- pres_res |>
+  inner_join(education_data_cleaned, by = c("county_fips" = "FIPS.Code", "year"))
+
+# View combined dataset
+head(pres_college)
+
+```
+
+```{r}
+library(ggplot2)
+
+ggplot(pres_college, aes(x = go_to_college, y = candidatevotes / totalvotes, color = party)) +
+  geom_point(alpha = 0.6) +
+  facet_wrap(~ year) +
+  labs(
+    title = "Correlation Between College Education and Vote Share by Party and Year",
+    x = "Percentage of Adults with College Education",
+    y = "Vote Share",
+    color = "Party"
+  ) +
+  theme_minimal()
+
+```
+
+1. Correlation Between Education and Voting Patterns:
+
+Counties with a higher percentage of college-educated adults (toward the right of the x-axis) tend to have a higher vote share for Democrats (pink dots) across all years.This suggests a positive relationship between college education levels and Democratic voting patterns.
+
+2. Republican Vote Share:
+
+The Republican vote share (red dots) appears to be more evenly distributed across the education spectrum but tends to dominate in counties with lower levels of college education (toward the left of the x-axis).This implies that Republicans may have stronger support in less college-educated counties.
+
+3. Change Over Time:
+
+The overall patterns for each party remain relatively consistent from 2000 to 2020, but there appears to be a slight increase in the density of points at higher education levels over time, which could reflect a broader national increase in college attainment. The Democratic vote share at higher education levels seems to grow more pronounced in later years.
+
+4. Minor Parties (Green, Libertarian, and Other):
+
+Minor parties like Green (blue dots) and Libertarian (green dots) maintain a low vote share across all levels of education.Their distribution appears consistent across counties and years, suggesting they do not have a strong correlation with education levels.
+
+5. Overall Spread:
+
+In counties with a wide range of education levels (from 25% to 75%), both Democrats and Republicans capture significant portions of the vote share, highlighting competitive voting dynamics in these regions.
