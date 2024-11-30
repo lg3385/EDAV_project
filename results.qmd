@@ -1,4 +1,7 @@
 # Results
+
+## Education Level
+
 ```{r}
 #Loading data sets
 pres_res <- read.csv("countypres_2000-2020.csv")
