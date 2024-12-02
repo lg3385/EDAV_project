@@ -1,5 +1,345 @@
 # Results
 
+```{r}
+suppressPackageStartupMessages(library(tidyverse))
+library(dplyr)
+library(ggplot2)
+
+countypres <- read.csv("countypres_cleaned.csv")
+education <- read.csv("Education_cleaned.csv")
+unemployment <- read.csv("Unemployment_cleaned.csv")
+saipe_04 <- read.csv("est04ALL_cleaned.csv")
+saipe_08 <- read.csv("est08ALL_cleaned.csv")
+saipe_12 <- read.csv("est12ALL_cleaned.csv")
+saipe_16 <- read.csv("est16ALL_cleaned.csv")
+saipe_20 <- read.csv("est20ALL_cleaned.csv")
+```
+
+
+## Regional Voting Trends
+
+### Regional Partisan Preferences:
+
+The major political parties (Democrat and Republican) dominate the voting landscape, reflecting a two-party system's strength in the U.S. 
+
+Across all regions, the vote percentages for smaller parties remain marginal, with slight fluctuations. While smaller parties like Green and Libertarian hold less than 5% of the vote share across all regions, their presence highlights the diversity in political preferences.
+
+### Trends Over Time:
+
+Midwest: The region shows a competitive split between Democrats and Republicans, with Republicans gaining slight momentum in recent years.
+
+Northeast: The Democratic party consistently dominates, reflecting a strong blue trend over the two decades.
+
+South: The Republican party holds a significant lead throughout the period, emphasizing its traditional stronghold in this region.
+
+West: While the Democrats maintain a consistent lead, there is a more diverse vote share, with smaller parties like Green and Other having a visible presence.
+
+The Northeast and South show remarkable stability in their dominant party preferences (Democrat and Republican, respectively). The Midwest and West reflect more dynamic trends, with visible shifts in vote percentages, especially during election years like 2008 and 2016.
+
+### Implications:
+
+The findings highlight deep regional divides in political preferences, with the South being reliably Republican and the Northeast consistently Democratic. The Midwest and West emerge as more competitive regions, making them key battlegrounds in presidential elections. Smaller parties, while not competitive at a national scale, represent alternative voices that persist in the political landscape.
+
+```{r, fig.width=10, fig.height=8}
+suppressPackageStartupMessages(library(scales))
+
+regions <- list(
+  "Northeast" = c("ME", "NH", "VT", "MA", "RI", "CT", "NY", "NJ", "PA"),
+  "Midwest" = c("OH", "MI", "IN", "IL", "MO", "WI", "MN", "IA", "KS", "NE", "SD", "ND"),
+  "South" = c("DE", "MD", "WV", "VA", "KY", "NC", "SC", "GA", "FL", "AL", "MS", "TN", "AR", "LA", "OK", "TX", "DC"),
+  "West" = c("MT", "WY", "CO", "NM", "AZ", "UT", "NV", "ID", "WA", "OR", "CA", "AK", "HI")
+)
+
+countypres <- countypres |>
+  mutate(region = case_when(
+    state_po %in% unlist(regions["Northeast"]) ~ "Northeast",
+    state_po %in% unlist(regions["Midwest"]) ~ "Midwest",
+    state_po %in% unlist(regions["South"]) ~ "South",
+    state_po %in% unlist(regions["West"]) ~ "West",
+  ))
+
+regional_data <- countypres |>
+  group_by(region, year, party) |>
+  summarize(candidatevotes = sum(candidatevotes), .groups = "drop") |>
+  group_by(region, year) |>
+  mutate(vote_percentage = candidatevotes / sum(candidatevotes) * 100)
+
+party_colors <- c(
+  "DEMOCRAT" = "#377eb8",
+  "REPUBLICAN" = "#e41a1c",
+  "GREEN" = "#4daf4a",
+  "OTHER" = "#984ea3",
+  "LIBERTARIAN" = "#ff7f00"
+)
+
+ggplot(regional_data, aes(x = year, y = vote_percentage, fill = party)) +
+  geom_area(alpha = 0.6) + 
+  facet_wrap(~region, ncol = 2) + 
+  scale_fill_manual(values = party_colors) +
+  labs(
+    title = "Regional Voting Trends (2000-2020)",
+    subtitle = "Comparison of vote shares by political party across U.S. regions",
+    x = "Year (2000-2020)",
+    y = "Vote Percentage (%)",
+    fill = "Political Party"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 10),
+    axis.title = element_text(size = 12),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid.major = element_line(color = "gray80"),
+    panel.grid.minor = element_blank(),
+    strip.text = element_text(size = 14, face = "bold")
+  )
+```
+
+
+## Swing Counties Across Elections
+
+### Trends Over Time:
+
+The Midwest and South consistently show the highest number of swing counties. This reflects the competitive nature of these regions and their importance in deciding presidential elections. The Northeast and West have consistently fewer swing counties, reflecting more stable party preferences in these regions. This aligns with the historical dominance of Democrats in the Northeast and a mix of Democratic and Republican strongholds in the West.
+
+Across all regions, the number of swing counties peaked in the 2008 election. This suggests significant shifts in voter preferences, possibly due to socioeconomic factors or the unique dynamics of that election. Starting in 2012, the number of swing counties has steadily decreased across all regions, indicating that voting patterns have become more entrenched and less likely to change between elections.
+
+### Implications:
+
+The high number of swing counties in the Midwest and South highlights these regions as critical battlegrounds in U.S. presidential elections. The decline in swing activity may indicate increased political polarization or stronger alignment with party preferences over time. Understanding swing dynamics can help campaigns target regions more effectively and shed light on changing voter priorities.
+
+```{r}
+dominant_party <- countypres |>
+  group_by(county_name, year, state_po) |>
+  summarize(
+    dominant_party = party[which.max(candidatevotes)],
+    .groups = "drop"
+  )
+
+swing_counties <- dominant_party |>
+  group_by(county_name) |>
+  arrange(year) |>
+  mutate(
+    previous_party = lag(dominant_party),
+    is_swing = dominant_party != previous_party
+  ) |>
+  filter(!is.na(previous_party)) |>
+  mutate(swing_status = ifelse(is_swing, "Swing", "No Swing"))
+
+swing_only <- swing_counties |> filter(swing_status == "Swing")
+
+swing_only <- swing_only |>
+  mutate(region = case_when(
+    state_po %in% regions$Northeast ~ "Northeast",
+    state_po %in% regions$Midwest ~ "Midwest",
+    state_po %in% regions$South ~ "South",
+    state_po %in% regions$West ~ "West"
+  ))
+
+swing_by_region <- swing_only |>
+  group_by(region, year) |>
+  summarize(num_swing_counties = n(), .groups = "drop")
+
+ggplot(swing_by_region, aes(x = year, y = num_swing_counties, color = region, group = region)) +
+  geom_line(linewidth=1) +
+  labs(
+    title = "Number of Swing Counties by Region (2000-2020)",
+    x = "Election Year",
+    y = "Number of Swing Counties",
+    color = "Region"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 8),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+```
+
+
+## Income vs. Major Parties Voting Trends
+
+### Trends Over Time:
+
+The relationship between income and voting percentages remains consistent from 2004 to 2020. There is no dramatic shift in how income affects voting trends over time. Both major parties (Democrat and Republican) receive votes from counties across all income ranges, indicating that household income is not the sole factor influencing voting behavior.
+
+Republican counties tend to cluster in higher vote percentage ranges, often above 50%, especially in lower-income brackets. Democratic votes are more evenly distributed across the income spectrum, suggesting a broader appeal across different economic groups.
+
+Both parties have regions where they dominate, shown by clusters of points with vote percentages nearing 100%. These likely represent party strongholds. Lower-income counties show significant Republican support, while higher-income counties exhibit more variability in voting patterns, with both parties competing for support.
+
+### Implications:
+
+While income may influence voting trends in some cases, other factors (e.g., regional culture, education, or urbanization) likely play a more significant role in shaping political preferences. The stability over time suggests entrenched political alignments that are less influenced by changes in income levels.
+
+```{r, fig.width=8, fig.height=12}
+income_2004 <- saipe_04 |> mutate(year = 2004)
+income_2008 <- saipe_04 |> mutate(year = 2008)
+income_2012 <- saipe_04 |> mutate(year = 2012)
+income_2016 <- saipe_04 |> mutate(year = 2016)
+income_2020 <- saipe_04 |> mutate(year = 2020)
+
+income_data <- bind_rows(income_2004, income_2008, income_2012, income_2016, income_2020) |>
+  select(county_fips, state_po, Name, year, Median_Household_Income = Median.Household.Income)
+
+voting_with_income <- countypres |>
+  left_join(income_data, by = c("county_fips", "state_po", "year")) |>
+  filter(!is.na(Median_Household_Income)) |>
+  select(year, state_po, county_name, county_fips, party, 
+         candidatevotes, totalvotes, region,Median_Household_Income)
+
+voting_with_income <- voting_with_income |>
+  mutate(party_vote_percentage = (candidatevotes / totalvotes) * 100)
+
+major_parties <- voting_with_income |>
+  filter(party %in% c("DEMOCRAT", "REPUBLICAN"))
+
+major_parties_clean <- major_parties |>
+  filter(!is.na(Median_Household_Income), Median_Household_Income > 0, !is.na(party_vote_percentage))
+
+ggplot(major_parties_clean, aes(x = as.numeric(gsub(",", "", Median_Household_Income)), 
+                          y = party_vote_percentage, color = party)) +
+  geom_point(alpha = 0.2) +
+  facet_wrap(~year, ncol = 2) +
+  labs(
+    title = "Income vs. Major Parties Voting Trends",
+    subtitle = "Relationship between Median Household Income and Voting Percentages",
+    x = "Median Household Income (USD)",
+    y = "Vote Percentage (%)",
+    color = "Major Party"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+```
+
+
+## Voting Trends in High vs. Low Unemployment Counties
+
+
+### Trends Over Time:
+
+Counties with both high and low unemployment consistently show stronger support for the Republican party. This trend persists across all election years (2000–2020). In both high and low unemployment counties, the Democratic party's average vote percentage declines slightly from 2000 to 2020, indicating a possible shift in voter preferences or party alignment. Third parties, including Libertarian and Green, maintain consistently low support in both high and low unemployment categories, with minor fluctuations in specific years like 2016. While there are small variations, the overall voting patterns for major parties (Republican and Democrat) remain relatively stable in relation to unemployment categories over time.
+
+The Republican party consistently shows higher median vote percentages in both high and low unemployment counties. Their vote distribution is wider in high unemployment counties, indicating significant variation in support. The Democratic party has lower median vote percentages compared to Republicans in both categories. The interquartile range (middle 50% of data) for Democrats is narrower, suggesting more consistent levels of support. Third parties (Green, Libertarian, and Others) consistently show very low vote percentages across both categories, with little variation or influence.
+
+### Implications:
+
+These results suggest that unemployment levels may influence voter preferences, with high unemployment areas showing greater dispersion in support for major parties and the Republican party seeing stronger support in economically distressed counties. However, the consistent trends indicate that unemployment is just one of many factors influencing voting behavior.
+
+```{r, fig.width=8, fig.height=5}
+voting_with_unemployment <- countypres |>
+  left_join(unemployment, by = c("county_fips", "state_po", "year")) |>
+  filter(!is.na(Unemployment_rate)) |>
+  mutate(unemployment_category = ifelse(Unemployment_rate > 6, "High Unemployment", "Low Unemployment")) |>
+  mutate(party_vote_percentage = (candidatevotes / totalvotes) * 100)
+
+unemployment_trends <- voting_with_unemployment |>
+  group_by(unemployment_category, year, party) |>
+  summarize(avg_vote_percentage = mean(party_vote_percentage, na.rm = TRUE), .groups = "drop")
+
+ggplot(unemployment_trends, aes(x = year, y = avg_vote_percentage, color = party, group = party)) +
+  geom_line(linewidth = 1) +
+  facet_wrap(~unemployment_category) +
+  labs(
+    title = "Voting Trends in High vs. Low Unemployment Counties",
+    subtitle = "Average vote percentages for parties in counties with varying unemployment rates",
+    x = "Election Year",
+    y = "Average Vote Percentage (%)",
+    color = "Political Party"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 8),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+```
+
+```{r, fig.width=8, fig.height=8}
+ggplot(voting_with_unemployment, aes(x = unemployment_category, y = party_vote_percentage, fill = party)) +
+  geom_boxplot(outlier.shape = NA, alpha = 0.6) +
+  coord_cartesian(ylim = c(0, 100)) +
+  labs(
+    title = "Vote Percentage Distribution by Unemployment Category",
+    subtitle = "Comparison of vote percentages for major parties in high vs. low unemployment counties",
+    x = "Unemployment Category",
+    y = "Vote Percentage (%)",
+    fill = "Political Party"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 8)
+  )
+```
+
+
+## Correlation Between Socioeconomic Indicators
+
+### Trends Over Time:
+
+High Unemployment Counties: These counties are more likely to show higher Republican vote shares, indicating that unemployment might influence political preferences toward parties promising economic recovery or change. Low Unemployment Counties: Tend to exhibit relatively balanced or higher Democratic vote shares, suggesting that stability in employment may align with Democratic policies in those regions.
+
+Lower-Income Counties: Both Democratic and Republican support exist, but Democratic votes are more evenly spread across lower-income brackets. This suggests that Democrats have a broader appeal across lower socioeconomic strata. Higher-Income Counties: A stronger concentration of Republican votes emerges as income levels increase, reflecting an alignment with Republican fiscal policies or tax preferences.
+
+There’s a clear socioeconomic divide in voting trends. Republican support appears stronger in high-unemployment and high-income areas, while Democratic support is more consistent in lower-income and lower-unemployment regions. This polarization reflects how different economic issues resonate with voter bases of each party.
+
+Counties with mid-range unemployment and income levels might serve as swing regions, as both parties demonstrate vote shares in these demographics.
+
+### Implications:
+
+These demonstrate the strong influence of socioeconomic factors like unemployment and income on voting behavior. Political campaigns, policymakers, and researchers can use this information to understand voter priorities and craft strategies that resonate with key constituencies.
+
+```{r, fig.width=8, fig.height=10}
+library(patchwork)
+
+data_mix <- voting_with_unemployment  |>
+  left_join(income_data, by = c("county_fips", "state_po", "year")) |>
+  filter(!is.na(Median_Household_Income))
+
+correlation_data <- data_mix |>
+  select(Median_Household_Income, Unemployment_rate, party_vote_percentage, party) |>
+  mutate(Median_Household_Income = as.numeric(gsub(",", "", Median_Household_Income))) |>
+  filter(party %in% c("DEMOCRAT", "REPUBLICAN"))
+
+heatmap1 <- ggplot(correlation_data, aes(x = Unemployment_rate, y = party_vote_percentage)) +
+  geom_hex(bins = 30) +
+  scale_fill_gradient(low = "white", high = "red") +
+  labs(
+    title = "Hex Heatmap: Unemployment Rate vs. Vote Percentage by Major Party",
+    x = "Unemployment Rate (%)",
+    y = "Vote Percentage (%)",
+    fill = "Density"
+  ) +
+  facet_wrap(~party) +
+  theme_minimal() +
+  theme_classic(base_size = 12)
+
+heatmap2 <- ggplot(correlation_data, aes(x = Median_Household_Income, y = party_vote_percentage)) +
+  geom_hex(bins = 30) +
+  scale_fill_gradient(low = "white", high = "blue") +
+  labs(
+    title = "Hex Heatmap: Income vs. Vote Percentage by Major Party",
+    x = "Median Household Income (USD)",
+    y = "Vote Percentage (%)",
+    fill = "Density"
+  ) +
+  facet_wrap(~party) +
+  theme_minimal() +
+  theme_classic(base_size = 12)
+
+combined_plot <- heatmap1 / heatmap2
+
+print(combined_plot)
+```
+
+
 ## Education Level
 
 ```{r}
