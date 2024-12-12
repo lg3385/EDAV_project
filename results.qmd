@@ -95,7 +95,44 @@ ggplot(regional_data, aes(x = year, y = vote_percentage, fill = party)) +
     strip.text = element_text(size = 14, face = "bold")
   )
 ```
+## Average Vote Share by Party and Region (2020)
 
+While time series plots are valuable for understanding how trends evolve over multiple election cycles, this Cleveland dot plot focuses on a single point in time—specifically, the 2020 election—to highlight the distribution of average vote shares by region and party. By zeroing in on one year, we can more clearly see the comparative standing of each party without the distraction of changing trends.
+
+### Implications:
+Northeast: Democrats maintain a strong lead over Republicans, with smaller parties (Green, Libertarian, and Other) capturing only marginal shares.
+
+Midwest: The Republicans and Democrats are relatively close, indicating a more competitive landscape than the Northeast. Nonetheless, the two major parties dominate, while smaller parties remain on the periphery.
+
+South: Republicans have a noticeable advantage over Democrats, reflecting the region’s conservative lean. Smaller parties again trail far behind.
+
+West: Similar to the Midwest, the West shows a more balanced distribution, although Democrats hold a lead over Republicans. The presence of smaller parties is slightly more visible here than in the South or Northeast, but they still remain well behind the two major parties.
+
+```{r}
+library(tidytext)
+
+avg_vote_2020 <- regional_data %>%
+  filter(year == 2020) %>%
+  group_by(region, party) %>%
+  summarize(avg_vote = mean(vote_percentage, na.rm = TRUE), .groups = "drop")
+
+ggplot(avg_vote_2020, aes(x = avg_vote, y = reorder_within(party, avg_vote, region), color = party)) +
+  geom_point(size = 3) +
+  facet_wrap(~ region, scales = "free_y") +
+  scale_y_reordered() + # This function is from tidytext
+  scale_color_manual(values = party_colors) +
+  labs(
+    title = "Average Vote Share by Party and Region (2020)",
+    x = "Average Vote Share (%)",
+    y = "Party"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    strip.text = element_text(size = 12, face = "bold")
+  )
+
+```
 
 ## Swing Counties Across Elections
 
@@ -215,10 +252,69 @@ ggplot(major_parties_clean, aes(x = as.numeric(gsub(",", "", Median_Household_In
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
 ```
+## Average Vote Share Over Time by Income Group
 
+### Trends Over Time:
+From 2004 through 2016, the Republican Party generally held a higher average vote share across all income groups, maintaining a solid lead in high- and middle-income counties and gradually improving their standing among low-income counties. Meanwhile, the Democratic Party’s support remained relatively steady over this period, generally lagging behind Republicans but not experiencing large swings. Both parties showed relative stability, with Republicans consistently commanding the largest share in wealthier areas and Democrats holding a modest but persistent presence across all income levels.
+
+However, by 2020, there is a marked and sudden decrease in the average vote share for both major parties in every income group. This drop is notable because it breaks the previously steady patterns observed in earlier years. The previously clear Republican advantage and the Democrats’ steady, if smaller, portion of the vote share both diminish sharply.
+
+### Implications:
+While previous election cycles showed relatively stable income-based patterns—Republicans faring better in wealthier counties and Democrats maintaining consistent support across income levels—the 2020 data stands out as a significant departure. Several unique, real-world factors from that election year may have contributed to this shift:
+
+1. COVID-19 and the Economy:
+The pandemic caused job losses, closed businesses, and made remote work common, shaking up normal economic patterns. This uncertainty may have weakened the usual link between income and voting, as people from all income levels reconsidered their political choices.
+
+2. Social and Political Tension:
+Intense social unrest and racial justice protests in 2020 shifted voters’ focus away from economic issues. Instead of voting based mainly on income, many voters cared more about how parties and candidates responded to social and health crises, changing traditional voting habits.
+
+3. Changes in Voting Methods:
+Early voting, mail-in ballots, and a record turnout brought more diverse voters into the process. Combined with a highly charged media environment and deep political divisions, these new voting conditions encouraged some voters to stray from their typical patterns. As a result, both major parties lost some support across all income groups in 2020.
+
+```{r}
+library(dplyr)
+library(ggplot2)
+
+# Ensure Median_Household_Income is numeric
+major_parties_clean <- major_parties_clean %>%
+  mutate(Median_Household_Income = as.numeric(gsub(",", "", as.character(Median_Household_Income))))
+
+# Define income quantiles (e.g., low, medium, high)
+quantiles <- quantile(major_parties_clean$Median_Household_Income, probs = c(0.33, 0.67), na.rm = TRUE)
+low_threshold <- quantiles[1]
+high_threshold <- quantiles[2]
+
+major_parties_time <- major_parties_clean %>%
+  mutate(income_group = case_when(
+    Median_Household_Income <= low_threshold ~ "Low Income",
+    Median_Household_Income > low_threshold & Median_Household_Income <= high_threshold ~ "Middle Income",
+    Median_Household_Income > high_threshold ~ "High Income"
+  )) %>%
+  group_by(year, party, income_group) %>%
+  summarize(avg_vote_share = mean(party_vote_percentage, na.rm = TRUE), .groups = "drop")
+
+party_colors <- c(
+  "DEMOCRAT" = "blue",
+  "REPUBLICAN" = "red"
+)
+
+ggplot(major_parties_time, aes(x = year, y = avg_vote_share, color = party, group = party)) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  facet_wrap(~ income_group) +
+  scale_color_manual(values = party_colors) +
+  labs(
+    title = "Average Vote Share Over Time by Income Group",
+    x = "Year",
+    y = "Average Vote Share (%)",
+    color = "Party"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+```
 
 ## Voting Trends in High vs. Low Unemployment Counties
-
 
 ### Trends Over Time:
 
@@ -355,19 +451,6 @@ saipe_20 <- read.csv("est20ALL.csv")
 ```
 
 ```{r}
-head(pres_res, n = 20)
-```
-
-```{r}
-head(education_data, n = 1000)
-# Replace 'Attribute' with the name of the column you want to check
-unique_values <- unique(education_data$Attribute)
-
-# View the unique values
-print(unique_values)
-
-```
-```{r}
 library(ggplot2)
 library(dplyr)
 library(tidyr)
@@ -410,12 +493,6 @@ education_data_cleaned <- education_data |>
 pres_education <- pres_res |>
   inner_join(education_data_cleaned, by = c("county_fips" = "FIPS.Code", "year"))
 
-# View combined dataset
-head(pres_education)
-
-```
-```{r}
-head(pres_education, n=40)
 ```
 
 ## Correlation Between College Education and Vote Share by Party and Year
@@ -452,17 +529,24 @@ education_data_cleaned <- education_data |>
 pres_college <- pres_res |>
   inner_join(education_data_cleaned, by = c("county_fips" = "FIPS.Code", "year"))
 
-# View combined dataset
-head(pres_college)
-
 ```
 
 ```{r}
 library(ggplot2)
 
+# Define your color mapping
+party_colors <- c(
+  "DEMOCRAT" = "blue",
+  "REPUBLICAN" = "red",
+  "GREEN" = "green3",
+  "LIBERTARIAN" = "darkgoldenrod1",
+  "OTHER" = "gray50"
+)
+
 ggplot(pres_college, aes(x = go_to_college, y = candidatevotes / totalvotes, color = party)) +
   geom_point(alpha = 0.6) +
   facet_wrap(~ year) +
+  scale_color_manual(values = party_colors) + 
   labs(
     title = "Correlation Between College Education and Vote Share by Party and Year",
     x = "Percentage of Adults with College Education",
@@ -471,11 +555,12 @@ ggplot(pres_college, aes(x = go_to_college, y = candidatevotes / totalvotes, col
   ) +
   theme_minimal()
 
+
 ```
 
 1. Correlation Between Education and Voting Patterns:
 
-Counties with a higher percentage of college-educated adults (toward the right of the x-axis) tend to have a higher vote share for Democrats (pink dots) across all years.This suggests a positive relationship between college education levels and Democratic voting patterns.
+Counties with a higher percentage of college-educated adults (toward the right of the x-axis) tend to have a higher vote share for Democrats (blue dots) across all years.This suggests a positive relationship between college education levels and Democratic voting patterns.
 
 2. Republican Vote Share:
 
@@ -487,8 +572,48 @@ The overall patterns for each party remain relatively consistent from 2000 to 20
 
 4. Minor Parties (Green, Libertarian, and Other):
 
-Minor parties like Green (blue dots) and Libertarian (green dots) maintain a low vote share across all levels of education.Their distribution appears consistent across counties and years, suggesting they do not have a strong correlation with education levels.
+Minor parties like Green (green dots) and Libertarian (gray dots) maintain a low vote share across all levels of education.Their distribution appears consistent across counties and years, which suggests they do not have a strong correlation with education levels.
 
 5. Overall Spread:
 
-In counties with a wide range of education levels (from 25% to 75%), both Democrats and Republicans capture significant portions of the vote share, highlighting competitive voting dynamics in these regions.
+In counties with a wide range of education levels (from 25% to 75%), both Democrats and Republicans capture significant portions of the vote share, which highlights competitive voting dynamics in these regions.
+
+## Correlation Between College Education and Vote Share by Party and Year
+
+```{r}
+library(dplyr)
+library(ggplot2)
+
+# Calculate correlation over time for all parties
+correlation_over_time <- pres_college %>%
+  group_by(year, party) %>%
+  summarize(corr = cor(go_to_college, candidatevotes/totalvotes, use = "complete.obs"), .groups = "drop")
+
+# Define party colors
+party_colors <- c(
+  "DEMOCRAT" = "blue",
+  "REPUBLICAN" = "red",
+  "GREEN" = "green3",
+  "LIBERTARIAN" = "darkgoldenrod1",
+  "OTHER" = "gray50"
+)
+
+# Plot correlations for all parties together with specified colors
+ggplot(correlation_over_time, aes(x = year, y = corr, color = party, group = party)) +
+  geom_line(size = 1.1) +
+  geom_point(size = 2) +
+  facet_wrap(~ party) +
+  scale_color_manual(values = party_colors) + 
+  labs(
+    title = "Correlation Over Time Between College Education and Vote Share by Party",
+    x = "Year",
+    y = "Correlation",
+    color = "Party"
+  ) +
+  theme_minimal()
+
+```
+
+1. Counties with higher levels of college education have increasingly leaned toward the Democratic Party over the analyzed time span.
+2. The Republican Party’s correlation with college education has weakened or become slightly negative by the final observed year, suggesting a relative decline in support from more highly educated counties.
+3. Smaller parties like the Green and Other categories showed initial strong positive correlations that have since moderated.
