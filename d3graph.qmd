@@ -1,6 +1,6 @@
 # Interactive graph
 
- <style>
+<style>
   * {
     font-family: sans-serif;
   }
