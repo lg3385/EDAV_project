@@ -282,7 +282,7 @@ ggplot(voting_with_unemployment, aes(x = unemployment_category, y = party_vote_p
 
 ## Correlation Between Socioeconomic Indicators
 
-### Trends Over Time:
+### Discovery:
 
 High Unemployment Counties: These counties are more likely to show higher Republican vote shares, indicating that unemployment might influence political preferences toward parties promising economic recovery or change. Low Unemployment Counties: Tend to exhibit relatively balanced or higher Democratic vote shares, suggesting that stability in employment may align with Democratic policies in those regions.
 
