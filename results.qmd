@@ -111,7 +111,7 @@ South: Republicans have a noticeable advantage over Democrats, reflecting the re
 West: Similar to the Midwest, the West shows a more balanced distribution, although Democrats hold a lead over Republicans. The presence of smaller parties is slightly more visible here than in the South or Northeast, but they still remain well behind the two major parties.
 
 ```{r}
-library(tidytext)
+suppressPackageStartupMessages(library(tidytext))
 
 avg_vote_2020 <- regional_data |>
   filter(year == 2020) |>
@@ -438,7 +438,27 @@ print(combined_plot)
 ```
 
 
-## Education Level
+## Correlation Between College Education and Vote Share by Party and Year
+
+1. Correlation Between Education and Voting Patterns:
+
+Counties with a higher percentage of college-educated adults (toward the right of the x-axis) tend to have a higher vote share for Democrats (blue dots) across all years.This suggests a positive relationship between college education levels and Democratic voting patterns.
+
+2. Republican Vote Share:
+
+The Republican vote share (red dots) appears to be more evenly distributed across the education spectrum but tends to dominate in counties with lower levels of college education (toward the left of the x-axis).This implies that Republicans may have stronger support in less college-educated counties.
+
+3. Change Over Time:
+
+The overall patterns for each party remain relatively consistent from 2000 to 2020, but there appears to be a slight increase in the density of points at higher education levels over time, which could reflect a broader national increase in college attainment. The Democratic vote share at higher education levels seems to grow more pronounced in later years.
+
+4. Minor Parties (Green, Libertarian, and Other):
+
+Minor parties like Green (green dots) and Libertarian (gray dots) maintain a low vote share across all levels of education.Their distribution appears consistent across counties and years, which suggests they do not have a strong correlation with education levels.
+
+5. Overall Spread:
+
+In counties with a wide range of education levels (from 25% to 75%), both Democrats and Republicans capture significant portions of the vote share, which highlights competitive voting dynamics in these regions.
 
 ```{r}
 #Loading data sets
@@ -450,9 +470,7 @@ saipe_08 <- read.csv("est08ALL.csv")
 saipe_12 <- read.csv("est12ALL.csv")
 saipe_16 <- read.csv("est16ALL.csv")
 saipe_20 <- read.csv("est20ALL.csv")
-```
 
-```{r}
 # Add a year column to the education data based on the Attribute
 education_data <- education_data |>
   mutate(
@@ -490,7 +508,6 @@ pres_education <- pres_res |>
 
 ```
 
-## Correlation Between College Education and Vote Share by Party and Year
 ```{r}
 # Add a year column to the education data based on the Attribute
 education_data <- education_data |>
@@ -521,9 +538,7 @@ education_data_cleaned <- education_data |>
 pres_college <- pres_res |>
   inner_join(education_data_cleaned, by = c("county_fips" = "FIPS.Code", "year"))
 
-```
 
-```{r}
 party_colors <- c(
   "DEMOCRAT" = "blue",
   "REPUBLICAN" = "red",
@@ -543,31 +558,16 @@ ggplot(pres_college, aes(x = go_to_college, y = candidatevotes / totalvotes, col
     color = "Party"
   ) +
   theme_minimal()
-
-
 ```
 
-1. Correlation Between Education and Voting Patterns:
 
-Counties with a higher percentage of college-educated adults (toward the right of the x-axis) tend to have a higher vote share for Democrats (blue dots) across all years.This suggests a positive relationship between college education levels and Democratic voting patterns.
+## Correlation Over Time Between College Education and Vote Share by Party
 
-2. Republican Vote Share:
+1. Counties with higher levels of college education have increasingly leaned toward the Democratic Party over the analyzed time span.
 
-The Republican vote share (red dots) appears to be more evenly distributed across the education spectrum but tends to dominate in counties with lower levels of college education (toward the left of the x-axis).This implies that Republicans may have stronger support in less college-educated counties.
+2. The Republican Party’s correlation with college education has weakened or become slightly negative by the final observed year, suggesting a relative decline in support from more highly educated counties.
 
-3. Change Over Time:
-
-The overall patterns for each party remain relatively consistent from 2000 to 2020, but there appears to be a slight increase in the density of points at higher education levels over time, which could reflect a broader national increase in college attainment. The Democratic vote share at higher education levels seems to grow more pronounced in later years.
-
-4. Minor Parties (Green, Libertarian, and Other):
-
-Minor parties like Green (green dots) and Libertarian (gray dots) maintain a low vote share across all levels of education.Their distribution appears consistent across counties and years, which suggests they do not have a strong correlation with education levels.
-
-5. Overall Spread:
-
-In counties with a wide range of education levels (from 25% to 75%), both Democrats and Republicans capture significant portions of the vote share, which highlights competitive voting dynamics in these regions.
-
-## Correlation Between College Education and Vote Share by Party and Year
+3. Smaller parties like the Green and Other categories showed initial strong positive correlations that have since moderated.
 
 ```{r}
 # Calculate correlation over time for all parties
@@ -600,111 +600,11 @@ ggplot(correlation_over_time, aes(x = year, y = corr, color = party, group = par
 
 ```
 
-1. Counties with higher levels of college education have increasingly leaned toward the Democratic Party over the analyzed time span.
-2. The Republican Party’s correlation with college education has weakened or become slightly negative by the final observed year, suggesting a relative decline in support from more highly educated counties.
-3. Smaller parties like the Green and Other categories showed initial strong positive correlations that have since moderated.
 
 ## Parallel Coordinates of Socioeconomic Factors & Vote Share (2020)
 
 Since 2020 was marked by numerous significant events—such as the COVID-19 pandemic, social unrest, shifting political landscapes, and widespread business closures—we will narrow our analysis to this year. Our goal is to examine the correlation between socioeconomic factors and the vote share for each major political party during this particular election year.
 
-```{r}
-library(tidyverse)
-library(GGally)
-
-# Combine datasets: include median household income, unemployment, education level, and vote share
-parallel_data <- voting_with_unemployment %>%
-  left_join(income_data, by = c("county_fips", "state_po", "year")) %>%
-  left_join(education_data_cleaned, by = c("county_fips" = "FIPS.Code", "year")) %>%
-  filter(year == 2020, party == "DEMOCRAT") %>%
-  mutate(Median_Household_Income = as.numeric(gsub(",", "", Median_Household_Income))) %>%
-  # Rename columns for clarity
-  rename(
-    Unemployment = Unemployment_rate,
-    Income = Median_Household_Income,
-    Edu_College = go_to_college 
-  ) %>%
-  select(county_fips, party_vote_percentage, Income, Unemployment, Edu_College)
-
-# Remove rows with missing values and ensure we have numeric data
-parallel_data <- parallel_data %>%
-  drop_na()
-
-parallel_data_numeric <- parallel_data %>%
-  select(party_vote_percentage, Income, Unemployment, Edu_College)
-
-# Create a sample of 1000 counties for easier observation
-sample_data <- parallel_data_numeric %>%
-  slice_sample(n = 1000)
-
-ggparcoord(
-  data = sample_data,
-  columns = 1:4,
-  scale = "std",
-  showPoints = FALSE,
-  title = "Parallel Coordinates: Socioeconomic Factors & Democratic Vote Share (2020)",
-  alphaLines = 0.1
-) +
-labs(
-  x = "Variables",
-  y = "Standardized Value",
-  caption = "Each line represents a single county in 2020"
-) +
-theme_minimal() +
-theme(
-  plot.title = element_text(size = 14, face = "bold"),
-  axis.text.x = element_text(angle = 45, hjust = 1)
-)
-
-```
-```{r}
-library(tidyverse)
-library(GGally)
-
-# Combine datasets: include median household income, unemployment, education level, and vote share
-parallel_data_rep <- voting_with_unemployment %>%
-  left_join(income_data, by = c("county_fips", "state_po", "year")) %>%
-  left_join(education_data_cleaned, by = c("county_fips" = "FIPS.Code", "year")) %>%
-  filter(year == 2020, party == "REPUBLICAN") %>%
-  mutate(Median_Household_Income = as.numeric(gsub(",", "", Median_Household_Income))) %>%
-  # Rename columns for clarity
-  rename(
-    Unemployment = Unemployment_rate,
-    Income = Median_Household_Income,
-    Edu_College = go_to_college 
-  ) %>%
-  select(county_fips, party_vote_percentage, Income, Unemployment, Edu_College)
-
-# Remove rows with missing values and ensure we have numeric data
-parallel_data_rep <- parallel_data_rep %>%
-  drop_na()
-
-parallel_data_numeric_rep <- parallel_data_rep %>%
-  select(party_vote_percentage, Income, Unemployment, Edu_College)
-
-# Create a sample of 1000 counties for easier observation
-sample_data_rep <- parallel_data_numeric_rep %>%
-  slice_sample(n = 1000)
-
-ggparcoord(
-  data = sample_data_rep,
-  columns = 1:4,
-  scale = "std",
-  showPoints = FALSE,
-  title = "Parallel Coordinates: Socioeconomic Factors & Republican Vote Share (2020)",
-  alphaLines = 0.1
-) +
-  labs(
-    x = "Variables",
-    y = "Standardized Value",
-    caption = "Each line represents a single county in 2020"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(size = 14, face = "bold"),
-    axis.text.x = element_text(angle = 45, hjust = 1)
-  )
-```
 ### Discovery:
 
 For both Democrats and Republicans, the lines are densely packed and intermixed. If there was a clear, linear relationship—such as high Democratic vote share occurring primarily in high-education, low-unemployment counties—we would see more distinct patterns (e.g., lines consistently slanting upward or downward together). Instead, the mass of overlapping lines suggests that counties with varying vote shares are distributed across the full range of these socioeconomic indicators.
@@ -732,3 +632,97 @@ Diverse, polarized media environments influence voters more than local socioecon
 
 6. Aggregation Effects and Data Granularity:
 County-level averages hide internal differences. More granular data might reveal clearer relationships, but at this scale, patterns blur together.
+
+```{r}
+suppressPackageStartupMessages(library(GGally))
+
+# Combine datasets: include median household income, unemployment, education level, and vote share
+parallel_data <- voting_with_unemployment |>
+  left_join(income_data, by = c("county_fips", "state_po", "year")) |>
+  left_join(education_data_cleaned, by = c("county_fips" = "FIPS.Code", "year")) |>
+  filter(year == 2020, party == "DEMOCRAT") |>
+  mutate(Median_Household_Income = as.numeric(gsub(",", "", Median_Household_Income))) |>
+  # Rename columns for clarity
+  rename(
+    Unemployment = Unemployment_rate,
+    Income = Median_Household_Income,
+    Edu_College = go_to_college 
+  ) |>
+  select(county_fips, party_vote_percentage, Income, Unemployment, Edu_College)
+
+# Remove rows with missing values and ensure we have numeric data
+parallel_data <- parallel_data |>
+  drop_na()
+
+parallel_data_numeric <- parallel_data |>
+  select(party_vote_percentage, Income, Unemployment, Edu_College)
+
+# Create a sample of 1000 counties for easier observation
+sample_data <- parallel_data_numeric |>
+  slice_sample(n = 1000)
+
+ggparcoord(
+  data = sample_data,
+  columns = 1:4,
+  scale = "std",
+  showPoints = FALSE,
+  title = "Parallel Coordinates: Socioeconomic Factors & Democratic Vote Share (2020)",
+  alphaLines = 0.1
+) +
+labs(
+  x = "Variables",
+  y = "Standardized Value",
+  caption = "Each line represents a single county in 2020"
+) +
+theme_minimal() +
+theme(
+  plot.title = element_text(size = 14, face = "bold"),
+  axis.text.x = element_text(angle = 45, hjust = 1)
+)
+
+```
+```{r}
+# Combine datasets: include median household income, unemployment, education level, and vote share
+parallel_data_rep <- voting_with_unemployment |>
+  left_join(income_data, by = c("county_fips", "state_po", "year")) |>
+  left_join(education_data_cleaned, by = c("county_fips" = "FIPS.Code", "year")) |>
+  filter(year == 2020, party == "REPUBLICAN") |>
+  mutate(Median_Household_Income = as.numeric(gsub(",", "", Median_Household_Income))) |>
+  # Rename columns for clarity
+  rename(
+    Unemployment = Unemployment_rate,
+    Income = Median_Household_Income,
+    Edu_College = go_to_college 
+  ) |>
+  select(county_fips, party_vote_percentage, Income, Unemployment, Edu_College)
+
+# Remove rows with missing values and ensure we have numeric data
+parallel_data_rep <- parallel_data_rep |>
+  drop_na()
+
+parallel_data_numeric_rep <- parallel_data_rep |>
+  select(party_vote_percentage, Income, Unemployment, Edu_College)
+
+# Create a sample of 1000 counties for easier observation
+sample_data_rep <- parallel_data_numeric_rep |>
+  slice_sample(n = 1000)
+
+ggparcoord(
+  data = sample_data_rep,
+  columns = 1:4,
+  scale = "std",
+  showPoints = FALSE,
+  title = "Parallel Coordinates: Socioeconomic Factors & Republican Vote Share (2020)",
+  alphaLines = 0.1
+) +
+  labs(
+    x = "Variables",
+    y = "Standardized Value",
+    caption = "Each line represents a single county in 2020"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+```
